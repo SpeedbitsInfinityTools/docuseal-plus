@@ -1,1 +1,31 @@
-<%= render 'logo_placeholder' %>
+<div class="my-4">
+  <% if current_account.logo.attached? %>
+    <div class="flex items-center gap-4 mb-4">
+      <div class="avatar">
+        <div class="w-24 rounded">
+          <%= image_tag current_account.logo, class: 'object-contain' %>
+        </div>
+      </div>
+      <div>
+        <p class="text-sm text-base-content/70"><%= current_account.logo.filename %></p>
+        <%= button_to t('remove'), settings_account_logo_path, method: :delete, class: 'btn btn-sm btn-error mt-2', data: { turbo_confirm: t('are_you_sure') } %>
+      </div>
+    </div>
+  <% end %>
+
+  <%= form_with url: settings_account_logo_path, method: :post,
+                html: { class: 'space-y-4', multipart: true } do |f| %>
+    <div class="form-control">
+      <label class="label">
+        <span class="label-text"><%= t('upload_logo') %></span>
+      </label>
+      <%= f.file_field :logo, accept: 'image/*', class: 'file-input file-input-bordered w-full' %>
+      <label class="label">
+        <span class="label-text-alt">PNG, JPG (200x200px)</span>
+      </label>
+    </div>
+    <div class="form-control">
+      <%= f.submit button_title(title: t('upload'), disabled_with: t('uploading')), class: 'base-button' %>
+    </div>
+  <% end %>
+</div>

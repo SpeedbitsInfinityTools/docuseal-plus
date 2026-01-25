@@ -1,0 +1,41 @@
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    volumes:
+      - ..:/workspace:cached
+      - bundle:/usr/local/bundle
+      - node_modules:/workspace/node_modules
+    ports:
+      - "3000:3000"
+      - "3035:3035"
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/docuseal_dev
+      - REDIS_URL=redis://redis:6379/0
+      - RAILS_ENV=development
+    command: sleep infinity
+
+  postgres:
+    image: postgres:16
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: docuseal_dev
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+volumes:
+  postgres_data:
+  bundle:
+  node_modules:

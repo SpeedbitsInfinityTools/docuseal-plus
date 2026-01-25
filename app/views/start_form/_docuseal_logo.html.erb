@@ -1,6 +1,16 @@
-<a href="/" class="flex justify-center items-center">
-  <span class="mr-3">
-    <%= render 'shared/logo', width: '50px', height: '50px' %>
-  </span>
-  <h1 class="text-5xl font-bold text-center">DocuSeal</h1>
-</a>
+<% account = local_assigns[:account] || (@template&.account rescue nil) %>
+<% if account&.logo&.attached? %>
+  <a href="/" class="flex justify-center items-center">
+    <span class="mr-3">
+      <%= image_tag account.logo, width: '50px', height: '50px', class: 'object-contain' %>
+    </span>
+    <h1 class="text-5xl font-bold text-center"><%= account.name %></h1>
+  </a>
+<% else %>
+  <a href="/" class="flex justify-center items-center">
+    <span class="mr-3">
+      <%= render 'shared/logo', width: '50px', height: '50px' %>
+    </span>
+    <h1 class="text-5xl font-bold text-center">DocuSeal</h1>
+  </a>
+<% end %>

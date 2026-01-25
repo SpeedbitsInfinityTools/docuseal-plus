@@ -84,6 +84,11 @@ class UsersController < ApplicationController
       return redirect_to settings_users_path, notice: I18n.t('unable_to_remove_user')
     end
 
+    # Prevent deletion of the last admin
+    if @user.admin? && current_account.users.active.admins.where.not(id: @user.id).count.zero?
+      return redirect_to settings_users_path, alert: 'Cannot remove the last admin user'
+    end
+
     @user.update!(archived_at: Time.current)
 
     redirect_back fallback_location: settings_users_path, notice: I18n.t('user_has_been_removed')
@@ -92,7 +97,7 @@ class UsersController < ApplicationController
   private
 
   def role_valid?(role)
-    User::ROLES.include?(role)
+    User::SELECTABLE_ROLES.include?(role)
   end
 
   def build_user

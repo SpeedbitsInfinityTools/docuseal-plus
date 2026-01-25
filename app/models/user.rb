@@ -48,8 +48,14 @@
 #
 class User < ApplicationRecord
   ROLES = [
-    ADMIN_ROLE = 'admin'
+    ADMIN_ROLE = 'admin',
+    EDITOR_ROLE = 'editor',
+    VIEWER_ROLE = 'viewer',
+    INTEGRATION_ROLE = 'integration'
   ].freeze
+
+  # Roles that can be selected in the UI (excludes system roles like integration)
+  SELECTABLE_ROLES = [ADMIN_ROLE, EDITOR_ROLE, VIEWER_ROLE].freeze
 
   EMAIL_REGEXP = /[^@;,<>\s]+@[^@;,<>\s]+/
 
@@ -76,8 +82,12 @@ class User < ApplicationRecord
   scope :active, -> { where(archived_at: nil) }
   scope :archived, -> { where.not(archived_at: nil) }
   scope :admins, -> { where(role: ADMIN_ROLE) }
+  scope :editors, -> { where(role: EDITOR_ROLE) }
+  scope :viewers, -> { where(role: VIEWER_ROLE) }
+  scope :integrations, -> { where(role: INTEGRATION_ROLE) }
 
   validates :email, format: { with: /\A[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\z/ }
+  validate :cannot_remove_last_admin, on: :update, if: :role_changed?
 
   def access_token
     super || build_access_token.tap(&:save!)
@@ -118,6 +128,40 @@ class User < ApplicationRecord
       %("#{full_name.delete('"')}" <#{email}>)
     else
       email
+    end
+  end
+
+  def admin?
+    role == ADMIN_ROLE
+  end
+
+  def editor?
+    role == EDITOR_ROLE
+  end
+
+  def viewer?
+    role == VIEWER_ROLE
+  end
+
+  def integration?
+    role == INTEGRATION_ROLE
+  end
+
+  def can_manage_templates?
+    admin? || editor?
+  end
+
+  def can_manage_submissions?
+    admin? || editor?
+  end
+
+  private
+
+  def cannot_remove_last_admin
+    return unless role_was == ADMIN_ROLE && role != ADMIN_ROLE
+
+    if account.users.active.admins.where.not(id:).count.zero?
+      errors.add(:role, 'cannot demote the last admin')
     end
   end
 end
