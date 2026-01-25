@@ -5,12 +5,10 @@
   "workspaceFolder": "/workspace",
   "forwardPorts": [3000],
   "postCreateCommand": "bundle install && yarn install",
-  "postStartCommand": "chmod +x .devcontainer/start-dev.sh && .devcontainer/start-dev.sh",
+  "postStartCommand": ".devcontainer/start-dev.sh",
   "customizations": {
     "vscode": {
       "extensions": [
-        "rebornix.Ruby",
-        "wingrunr21.vscode-ruby",
         "shopify.ruby-lsp",
         "Vue.volar",
         "dbaeumer.vscode-eslint",
@@ -19,11 +17,6 @@
       "settings": {
         "editor.formatOnSave": true
       }
-    }
-  },
-  "features": {
-    "ghcr.io/devcontainers/features/node:1": {
-      "version": "20"
     }
   }
 }
