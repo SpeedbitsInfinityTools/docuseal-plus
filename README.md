@@ -11,8 +11,9 @@
   Open source document filling and signing - Plus Edition
 </h3>
 <p align="center">
-  <strong>Forked and enhanced by <a href="https://www.speedbits.io">Speedbits</a> / Smart In Venture GmbH</strong>
+  <strong>Forked and enhanced by <a href="https://www.speedbits.io">Speedbits</a> / Smart In Venture GmbH for <a href="https://speedbits.io/infinity-tools/">Infinity Tools</a></strong>
 </p>
+<p>With <a href="https://speedbits.io/infinity-tools/">Infinity Tools</a>, installation of DocuSeal with Plus features is super easy - included in the Pro version (pay-once-use-forever)!
 
 ---
 
@@ -60,7 +61,7 @@ By default DocuSeal docker container uses an SQLite database to store data and c
 
 Download docker-compose.yml into your private server:
 ```sh
-curl https://raw.githubusercontent.com/smartinventure/docuseal/master/docker-compose.yml > docker-compose.yml
+curl https://raw.githubusercontent.com/SpeedbitsInfinityTools/docuseal-plus/master/docker-compose.yml > docker-compose.yml
 ```
 
 Run the app under a custom domain over https using docker compose (make sure your DNS points to the server to automatically issue ssl certs with Caddy):
@@ -93,7 +94,7 @@ Distributed under the **AGPLv3 License**. See [LICENSE](https://github.com/docus
 - Original DocuSeal © 2023 DocuSeal LLC
 - Modifications in this fork © 2026 Smart In Venture GmbH
 
-All modifications are subject to the AGPLv3 license terms. The source code for this fork is publicly available at [github.com/smartinventure/docuseal](https://github.com/smartinventure/docuseal).
+All modifications are subject to the AGPLv3 license terms. The source code for this fork is publicly available at [github.com/SpeedbitsInfinityTools/docuseal-plus](https://github.com/SpeedbitsInfinityTools/docuseal-plus).
 
 ## Disclaimer
 
