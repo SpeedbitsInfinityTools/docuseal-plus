@@ -5,7 +5,11 @@
       <%= render 'shared/title' %>
     </a>
     <span class="hidden sm:inline">
-      <%= render 'shared/github' if request.path.starts_with?('/settings') %>
+      <% if DocusealPlus.enabled?(:show_plus_badge) %>
+        <span class="badge badge-primary font-bold text-xs ml-2">PLUS VERSION BY SPEEDBITS</span>
+      <% elsif request.path.starts_with?('/settings') %>
+        <%= render 'shared/github' %>
+      <% end %>
     </span>
   </div>
   <% if signed_in? %>

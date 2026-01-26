@@ -49,13 +49,31 @@ This fork includes the following features that are normally part of DocuSeal Pro
 
 ## Deploy
 
-#### Docker
+### Docker Images
 
-```sh
-docker run --name docuseal -p 3000:3000 -v.:/data docuseal/docuseal
+DocuSeal Plus images are available from GitHub Container Registry for both **AMD64** and **ARM64** architectures:
+
+```
+ghcr.io/speedbitsinfinitytools/docuseal-plus:latest
+ghcr.io/speedbitsinfinitytools/docuseal-plus:2.3.0
+ghcr.io/speedbitsinfinitytools/docuseal-plus:2.3.0.1
 ```
 
-By default DocuSeal docker container uses an SQLite database to store data and configurations. Alternatively, it is possible use PostgreSQL or MySQL databases by specifying the `DATABASE_URL` env variable.
+#### Version Scheme
+
+- `latest` - Always the most recent build
+- `X.Y.Z` - Base DocuSeal version (e.g., `2.3.0`)
+- `X.Y.Z.N` - Plus release number (e.g., `2.3.0.1`, `2.3.0.2`, ...)
+
+The first three digits match the upstream DocuSeal version. The fourth digit is our Plus release counter.
+
+#### Docker Run
+
+```sh
+docker run --name docuseal-plus -p 3000:3000 -v.:/data ghcr.io/speedbitsinfinitytools/docuseal-plus:latest
+```
+
+By default, the container uses SQLite. For PostgreSQL or MySQL, specify the `DATABASE_URL` environment variable.
 
 #### Docker Compose
 
@@ -64,7 +82,7 @@ Download docker-compose.yml into your private server:
 curl https://raw.githubusercontent.com/SpeedbitsInfinityTools/docuseal-plus/master/docker-compose.yml > docker-compose.yml
 ```
 
-Run the app under a custom domain over https using docker compose (make sure your DNS points to the server to automatically issue ssl certs with Caddy):
+Run the app under a custom domain over HTTPS using Docker Compose (make sure your DNS points to the server to automatically issue SSL certs with Caddy):
 ```sh
 sudo HOST=your-domain-name.com docker compose up
 ```

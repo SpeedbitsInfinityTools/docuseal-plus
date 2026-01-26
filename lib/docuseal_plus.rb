@@ -22,6 +22,7 @@ module DocusealPlus
         hide_sso_menu: true,
         hide_trusted_signature_promo: true,
         show_speedbits_banner: true,
+        show_plus_badge: true,
 
         # Branding
         fork_name: 'DocuSeal Plus',

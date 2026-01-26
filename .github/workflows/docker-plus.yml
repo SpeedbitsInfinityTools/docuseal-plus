@@ -1,0 +1,154 @@
+name: Build DocuSeal Plus Docker Images
+
+on:
+  push:
+    branches:
+      - master
+      - main
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  check-trigger:
+    runs-on: ubuntu-latest
+    outputs:
+      should_build: ${{ steps.check.outputs.should_build }}
+      is_release: ${{ steps.check.outputs.is_release }}
+    steps:
+      - name: Check commit message for build triggers
+        id: check
+        run: |
+          COMMIT_MSG="${{ github.event.head_commit.message }}"
+          if [[ "$COMMIT_MSG" == *"[release]"* ]]; then
+            echo "should_build=true" >> $GITHUB_OUTPUT
+            echo "is_release=true" >> $GITHUB_OUTPUT
+          elif [[ "$COMMIT_MSG" == *"[latest]"* ]]; then
+            echo "should_build=true" >> $GITHUB_OUTPUT
+            echo "is_release=false" >> $GITHUB_OUTPUT
+          else
+            echo "should_build=false" >> $GITHUB_OUTPUT
+            echo "is_release=false" >> $GITHUB_OUTPUT
+          fi
+
+  build-and-push:
+    needs: check-trigger
+    if: needs.check-trigger.outputs.should_build == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: write
+      packages: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Read current version
+        id: version
+        run: |
+          CURRENT_VERSION=$(cat VERSION | tr -d '\n')
+          echo "current=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+          
+          # Parse version parts
+          IFS='.' read -ra PARTS <<< "$CURRENT_VERSION"
+          MAJOR="${PARTS[0]}"
+          MINOR="${PARTS[1]}"
+          PATCH="${PARTS[2]}"
+          BUILD="${PARTS[3]:-0}"
+          
+          echo "major=$MAJOR" >> $GITHUB_OUTPUT
+          echo "minor=$MINOR" >> $GITHUB_OUTPUT
+          echo "patch=$PATCH" >> $GITHUB_OUTPUT
+          echo "build=$BUILD" >> $GITHUB_OUTPUT
+
+      - name: Increment version for release
+        id: new_version
+        if: needs.check-trigger.outputs.is_release == 'true'
+        run: |
+          NEW_BUILD=$(( ${{ steps.version.outputs.build }} + 1 ))
+          NEW_VERSION="${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }}.${{ steps.version.outputs.patch }}.$NEW_BUILD"
+          echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "$NEW_VERSION" > VERSION
+          
+      - name: Set version for latest build
+        id: latest_version
+        if: needs.check-trigger.outputs.is_release == 'false'
+        run: |
+          echo "version=${{ steps.version.outputs.current }}" >> $GITHUB_OUTPUT
+
+      - name: Determine final version
+        id: final_version
+        run: |
+          if [[ "${{ needs.check-trigger.outputs.is_release }}" == "true" ]]; then
+            echo "version=${{ steps.new_version.outputs.version }}" >> $GITHUB_OUTPUT
+          else
+            echo "version=${{ steps.latest_version.outputs.version }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create .version file for Docker build
+        run: echo "${{ steps.final_version.outputs.version }}" > .version
+
+      - name: Commit version bump
+        if: needs.check-trigger.outputs.is_release == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add VERSION .version
+          git commit -m "Bump version to ${{ steps.final_version.outputs.version }} [skip ci]"
+          git push
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata for Docker (Release)
+        if: needs.check-trigger.outputs.is_release == 'true'
+        id: meta_release
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=latest
+            type=raw,value=${{ steps.final_version.outputs.version }}
+            type=raw,value=${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }}.${{ steps.version.outputs.patch }}
+
+      - name: Extract metadata for Docker (Latest only)
+        if: needs.check-trigger.outputs.is_release != 'true'
+        id: meta_latest
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=${{ steps.final_version.outputs.version }}
+            type=raw,value=${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }}.${{ steps.version.outputs.patch }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          platforms: linux/amd64,linux/arm64
+          tags: ${{ steps.meta_release.outputs.tags || steps.meta_latest.outputs.tags }}
+          labels: ${{ steps.meta_release.outputs.labels || steps.meta_latest.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Create Git tag for release
+        if: needs.check-trigger.outputs.is_release == 'true'
+        run: |
+          git tag "v${{ steps.final_version.outputs.version }}"
+          git push origin "v${{ steps.final_version.outputs.version }}"

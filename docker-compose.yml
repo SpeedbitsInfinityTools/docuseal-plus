@@ -3,7 +3,7 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    image: docuseal/docuseal:latest
+    image: ghcr.io/speedbitsinfinitytools/docuseal-plus:latest
     ports:
       - 3000:3000
     volumes:
