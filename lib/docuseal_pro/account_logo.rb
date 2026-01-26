@@ -32,23 +32,24 @@ module DocusealPro
 
     def validate_logo_type_and_size
       return unless logo.attached?
-      return unless logo.blob.present?
+      return if logo.blob.blank?
 
       unless logo.blob.content_type.in?(ALLOWED_LOGO_TYPES)
         errors.add(:logo, 'must be a PNG, JPEG, GIF, or WebP image')
         logo.purge
+        return
       end
 
-      if logo.blob.byte_size > MAX_LOGO_SIZE
-        errors.add(:logo, 'must be less than 5MB')
-        logo.purge
-      end
+      return unless logo.blob.byte_size > MAX_LOGO_SIZE
+
+      errors.add(:logo, 'must be less than 5MB')
+      logo.purge
     end
 
     # Resize the logo if it exceeds MAX_LOGO_DIMENSION
     def resize_logo_if_needed
       return unless logo.attached?
-      return unless logo.blob.present?
+      return if logo.blob.blank?
       return unless logo.blob.image?
 
       # Analyze the blob to get dimensions (if not already analyzed)

@@ -159,9 +159,8 @@ class User < ApplicationRecord
 
   def cannot_remove_last_admin
     return unless role_was == ADMIN_ROLE && role != ADMIN_ROLE
+    return unless account.users.active.admins.where.not(id:).none?
 
-    if account.users.active.admins.where.not(id:).count.zero?
-      errors.add(:role, 'cannot demote the last admin')
-    end
+    errors.add(:role, 'cannot demote the last admin')
   end
 end

@@ -17,8 +17,8 @@ class Ability
       viewer_abilities(user)
     when User::INTEGRATION_ROLE
       integration_abilities(user)
-    else
-      # Default to viewer for unknown roles
+    else # rubocop:disable Lint/DuplicateBranch
+      # Intentionally defaults to viewer_abilities for unknown roles (same as VIEWER_ROLE)
       viewer_abilities(user)
     end
   end

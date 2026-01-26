@@ -85,7 +85,7 @@ class UsersController < ApplicationController
     end
 
     # Prevent deletion of the last admin
-    if @user.admin? && current_account.users.active.admins.where.not(id: @user.id).count.zero?
+    if @user.admin? && current_account.users.active.admins.where.not(id: @user.id).none?
       return redirect_to settings_users_path, alert: 'Cannot remove the last admin user'
     end
 

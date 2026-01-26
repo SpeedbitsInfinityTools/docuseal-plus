@@ -38,7 +38,7 @@ class ProcessSubmitterRemindersJob
 
   def process_account_reminders(account)
     reminder_config = account.account_configs.find_by(key: AccountConfig::SUBMITTER_REMINDERS)
-    return unless reminder_config&.value.present?
+    return if reminder_config&.value.blank?
 
     durations = extract_durations(reminder_config.value)
     return if durations.empty?

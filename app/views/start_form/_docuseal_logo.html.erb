@@ -1,4 +1,4 @@
-<% account = local_assigns[:account] || (@template&.account rescue nil) %>
+<% account = local_assigns[:account] || @template&.account %>
 <% if account&.logo&.attached? %>
   <a href="/" class="flex justify-center items-center">
     <span class="mr-3">

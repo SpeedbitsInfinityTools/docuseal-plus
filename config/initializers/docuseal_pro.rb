@@ -19,7 +19,7 @@ end
 
 # Feature 4: Schedule the reminder job (only in server/worker mode, not during precompilation)
 Rails.application.config.after_initialize do
-  if defined?(Sidekiq) && (Rails.const_defined?('Server') || File.basename($PROGRAM_NAME) == 'sidekiq')
+  if defined?(Sidekiq) && (Rails.const_defined?(:Server) || File.basename($PROGRAM_NAME) == 'sidekiq')
     # Schedule the initial reminder processing job if not already scheduled
     Sidekiq.configure_server do |_config|
       # Check if the job is already scheduled to avoid duplicates on restart
