@@ -79,7 +79,7 @@ By default, the container uses SQLite. For PostgreSQL or MySQL, specify the `DAT
 
 Download docker-compose.yml into your private server:
 ```sh
-curl https://raw.githubusercontent.com/SpeedbitsInfinityTools/docuseal-plus/master/docker-compose.yml > docker-compose.yml
+curl https://raw.githubusercontent.com/speedbitsinfinitytools/docuseal-plus/master/docker-compose.yml > docker-compose.yml
 ```
 
 Run the app under a custom domain over HTTPS using Docker Compose (make sure your DNS points to the server to automatically issue SSL certs with Caddy):
@@ -112,7 +112,7 @@ Distributed under the **AGPLv3 License**. See [LICENSE](https://github.com/docus
 - Original DocuSeal © 2023 DocuSeal LLC
 - Modifications in this fork © 2026 Smart In Venture GmbH
 
-All modifications are subject to the AGPLv3 license terms. The source code for this fork is publicly available at [github.com/SpeedbitsInfinityTools/docuseal-plus](https://github.com/SpeedbitsInfinityTools/docuseal-plus).
+All modifications are subject to the AGPLv3 license terms. The source code for this fork is publicly available at [github.com/speedbitsinfinitytools/docuseal-plus](https://github.com/speedbitsinfinitytools/docuseal-plus).
 
 ## Disclaimer
 

@@ -29,7 +29,7 @@ module DocusealPlus
         fork_company: 'Speedbits',
         fork_company_full: 'Smart In Venture GmbH',
         fork_website: 'https://www.speedbits.io',
-        fork_repository: 'https://github.com/SpeedbitsInfinityTools/docuseal-plus'
+        fork_repository: 'https://github.com/speedbitsinfinitytools/docuseal-plus'
       }
     end
 
