@@ -1,0 +1,3 @@
+<% if DocusealPlus.show_speedbits_banner? && request.path.starts_with?('/settings') %>
+  <%= render 'shared/speedbits_banner' %>
+<% end %>

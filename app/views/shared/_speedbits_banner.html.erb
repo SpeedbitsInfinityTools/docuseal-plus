@@ -1,0 +1,88 @@
+<% plus = DocusealPlus %>
+<div class="alert alert-info mb-4 shadow-lg">
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+  </svg>
+  <span>
+    Modified DocuSeal version by
+    <a href="<%= plus.setting(:fork_website) %>" target="_blank" class="link font-semibold"><%= plus.setting(:fork_company) %></a>
+    with Plus Features.
+    <label for="speedbits-disclaimer-modal" class="link font-semibold cursor-pointer">Warnings apply!</label>
+  </span>
+</div>
+
+<input type="checkbox" id="speedbits-disclaimer-modal" class="modal-toggle" />
+<div class="modal" role="dialog">
+  <div class="modal-box max-w-2xl">
+    <label for="speedbits-disclaimer-modal" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
+    <h3 class="font-bold text-lg mb-4"><%= plus.setting(:fork_name) %> - Important Disclaimer</h3>
+
+    <div class="space-y-4 text-sm">
+      <div class="alert alert-warning">
+        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+        <span><strong>This is a modified version of DocuSeal</strong></span>
+      </div>
+
+      <div>
+        <h4 class="font-semibold mb-2">About This Fork</h4>
+        <p>This is a forked version of the official DocuSeal open-source project, modified by
+          <a href="<%= plus.setting(:fork_website) %>" target="_blank" class="link"><%= plus.setting(:fork_company) %></a> (<%= plus.setting(:fork_company_full) %>).
+          The original project can be found at:
+          <a href="https://github.com/docusealco/docuseal" target="_blank" class="link">github.com/docusealco/docuseal</a>
+        </p>
+      </div>
+
+      <div>
+        <h4 class="font-semibold mb-2">Plus Features Added</h4>
+        <ul class="list-disc list-inside space-y-1">
+          <li>User Management with multiple roles (Admin, Editor, Viewer)</li>
+          <li>Company Logo Personalization</li>
+          <li>Email Reminders for signature requests</li>
+        </ul>
+      </div>
+
+      <div class="alert alert-error">
+        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <div>
+          <h4 class="font-bold">No Liability Disclaimer</h4>
+          <p class="text-xs">These Plus features were developed with the assistance of AI tools. <%= plus.setting(:fork_company) %> (<%= plus.setting(:fork_company_full) %>)
+            does not assume any liability for errors, flaws, security vulnerabilities, or any damages arising from the use of this software.
+            Use at your own risk.</p>
+        </div>
+      </div>
+
+      <div>
+        <h4 class="font-semibold mb-2">Source Code</h4>
+        <p>The source code for this forked version is publicly available at:
+          <a href="<%= plus.setting(:fork_repository) %>" target="_blank" class="link"><%= plus.setting(:fork_repository).sub('https://', '') %></a>
+        </p>
+        <p class="mt-2">We welcome contributions, bug reports, and code fixes from the community.</p>
+      </div>
+
+      <div>
+        <h4 class="font-semibold mb-2">License Information</h4>
+        <p>DocuSeal is distributed under the <strong>AGPLv3 License</strong>.
+          Please refer to the <a href="https://github.com/docusealco/docuseal/blob/master/LICENSE" target="_blank" class="link">LICENSE</a> file for more information.</p>
+        <p class="mt-2">If you are using this software as part of the Infinity Tools package, please also refer to the
+          Terms & Conditions that came with your Infinity Tools license.</p>
+      </div>
+
+      <div class="divider"></div>
+
+      <p class="text-xs text-base-content/70">
+        Original DocuSeal © 2023 DocuSeal LLC. Modified version © <%= Time.current.year %> <%= plus.setting(:fork_company_full) %>.
+        All modifications are subject to the AGPLv3 license terms.
+      </p>
+    </div>
+
+    <div class="modal-action">
+      <label for="speedbits-disclaimer-modal" class="btn">Close</label>
+    </div>
+  </div>
+  <label class="modal-backdrop" for="speedbits-disclaimer-modal">Close</label>
+</div>
+

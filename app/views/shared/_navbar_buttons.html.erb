@@ -1,6 +1,6 @@
 <% if signed_in? && current_user != true_user %>
   <%= render 'shared/test_alert' %>
-<% elsif request.path.starts_with?('/settings') %>
+<% elsif request.path.starts_with?('/settings') && !DocusealPlus.hide_upgrade_button? %>
   <%= link_to "#{Docuseal::CLOUD_URL}/sign_up?#{{ redir: "#{Docuseal::CONSOLE_URL}/on_premises" }.to_query}", class: 'hidden md:inline-flex btn btn-warning btn-sm', data: { prefetch: false } do %>
     <%= t('upgrade') %>
   <% end %>

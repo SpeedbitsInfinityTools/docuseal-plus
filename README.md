@@ -4,35 +4,36 @@
       <img  alt="DocuSeal" src="https://github.com/docusealco/docuseal/assets/5418788/c12cd051-81cd-4402-bc3a-92f2cfdc1b06" width="80" />
       <br>
     </a>
-    DocuSeal
+    DocuSeal Plus
   </div>
 </h1>
 <h3 align="center">
-  Open source document filling and signing
+  Open source document filling and signing - Plus Edition
 </h3>
 <p align="center">
-  <a href="https://hub.docker.com/r/docuseal/docuseal">
-    <img alt="Docker releases" src="https://img.shields.io/docker/v/docuseal/docuseal">
-  </a>
-  <a href="https://discord.gg/qygYCDGck9">
-    <img src="https://img.shields.io/discord/1125112641170448454?logo=discord"/>
-  </a>
-  <a href="https://twitter.com/intent/follow?screen_name=docusealco">
-    <img src="https://img.shields.io/twitter/follow/docusealco?style=social" alt="Follow @docusealco" />
-  </a>
+  <strong>Forked and enhanced by <a href="https://www.speedbits.io">Speedbits</a> / Smart In Venture GmbH</strong>
 </p>
-<p>
-DocuSeal is an open source platform that provides secure and efficient digital document signing and processing. Create PDF forms to have them filled and signed online on any device with an easy-to-use, mobile-optimized web tool.
-</p>
-<h2 align="center">
-  <a href="https://demo.docuseal.tech">✨ Live Demo</a>
-  <span>|</span>
-  <a href="https://docuseal.com/sign_up">☁️ Try in Cloud</a>
-</h2>
 
-[![Demo](https://github.com/docusealco/docuseal/assets/5418788/d8703ea3-361a-423f-8bfe-eff1bd9dbe14)](https://demo.docuseal.tech)
+---
 
-## Features
+> **⚠️ Important Notice**
+>
+> This is a **forked version** of the official [DocuSeal](https://github.com/docusealco/docuseal) open-source project with additional "Plus Features" enabled. The Plus features were developed with the assistance of AI tools. **There may be errors, bugs, or security vulnerabilities.** Use at your own risk.
+>
+> **Speedbits (Smart In Venture GmbH) does not assume any liability** for damages arising from the use of this software.
+
+---
+
+## Plus Features (Added in this Fork)
+
+This fork includes the following features that are normally part of DocuSeal Pro:
+
+- **User Management** - Multiple user roles (Admin, Editor, Viewer) with granular permissions
+- **Company Logo Personalization** - Upload and display your company logo on documents
+- **Email Reminders** - Automatic email reminders for pending signature requests
+
+## Original DocuSeal Features
+
 - PDF form fields builder (WYSIWYG)
 - 12 field types available (Signature, Date, File, Checkbox etc.)
 - Multiple submitters per document
@@ -40,33 +41,12 @@ DocuSeal is an open source platform that provides secure and efficient digital d
 - Files storage on disk or AWS S3, Google Storage, Azure Cloud
 - Automatic PDF eSignature
 - PDF signature verification
-- Users management
 - Mobile-optimized
 - 7 UI languages with signing available in 14 languages
 - API and Webhooks for integrations
 - Easy to deploy in minutes
 
-## Pro Features
-- Company logo and white-label
-- User roles
-- Automated reminders
-- Invitation and identify verification via SMS
-- Conditional fields and formulas
-- Bulk send with CSV, XLSX spreadsheet import
-- SSO / SAML
-- Template creation with HTML API ([Guide](https://www.docuseal.com/guides/create-pdf-document-fillable-form-with-html-api))
-- Template creation with PDF or DOCX and field tags API ([Guide](https://www.docuseal.com/guides/use-embedded-text-field-tags-in-the-pdf-to-create-a-fillable-form))
-- Embedded signing form ([React](https://github.com/docusealco/docuseal-react), [Vue](https://github.com/docusealco/docuseal-vue), [Angular](https://github.com/docusealco/docuseal-angular) or [JavaScript](https://www.docuseal.com/docs/embedded))
-- Embedded document form builder ([React](https://github.com/docusealco/docuseal-react), [Vue](https://github.com/docusealco/docuseal-vue), [Angular](https://github.com/docusealco/docuseal-angular) or [JavaScript](https://www.docuseal.com/docs/embedded))
-- [Learn more](https://www.docuseal.com/pricing)
-
 ## Deploy
-
-|Heroku|Railway|
-|:--:|:---:|
-| [<img alt="Deploy on Heroku" src="https://www.herokucdn.com/deploy/button.svg" height="40">](https://heroku.com/deploy?template=https://github.com/docusealco/docuseal-heroku) | [<img alt="Deploy on Railway" src="https://railway.app/button.svg" height="40">](https://railway.app/template/IGoDnc?referralCode=ruU7JR)|
-|**DigitalOcean**|**Render**|
-| [<img alt="Deploy on DigitalOcean" src="https://www.deploytodo.com/do-btn-blue.svg" height="40">](https://cloud.digitalocean.com/apps/new?repo=https://github.com/docusealco/docuseal-digitalocean/tree/master&refcode=421d50f53990) | [<img alt="Deploy to Render" src="https://render.com/images/deploy-to-render-button.svg" height="40">](https://render.com/deploy?repo=https://github.com/docusealco/docuseal-render)
 
 #### Docker
 
@@ -80,7 +60,7 @@ By default DocuSeal docker container uses an SQLite database to store data and c
 
 Download docker-compose.yml into your private server:
 ```sh
-curl https://raw.githubusercontent.com/docusealco/docuseal/master/docker-compose.yml > docker-compose.yml
+curl https://raw.githubusercontent.com/smartinventure/docuseal/master/docker-compose.yml > docker-compose.yml
 ```
 
 Run the app under a custom domain over https using docker compose (make sure your DNS points to the server to automatically issue ssl certs with Caddy):
@@ -88,20 +68,35 @@ Run the app under a custom domain over https using docker compose (make sure you
 sudo HOST=your-domain-name.com docker compose up
 ```
 
-## For Businesses
-### Integrate seamless document signing into your web or mobile apps with DocuSeal
+## Contributing
 
-At DocuSeal we have expertise and technologies to make documents creation, filling, signing and processing seamlessly integrated with your product. We specialize in working with various industries, including **Banking, Healthcare, Transport, Real Estate, eCommerce, KYC, CRM, and other software products** that require bulk document signing. By leveraging DocuSeal, we can assist in reducing the overall cost of developing and processing electronic documents while ensuring security and compliance with local electronic document laws.
+We are grateful for any help, contributions, bug reports, and code fixes!
 
-[Book a Meeting](https://www.docuseal.com/contact)
+If you find issues or have improvements to suggest, please:
+- Open an issue on this repository
+- Submit a pull request with your changes
+- Share feedback with the community
+
+## Original Project
+
+This project is a fork of the official DocuSeal project:
+- **Original Repository**: [github.com/docusealco/docuseal](https://github.com/docusealco/docuseal)
+- **Original Website**: [docuseal.com](https://www.docuseal.com)
+- **Original Demo**: [demo.docuseal.tech](https://demo.docuseal.tech)
+
+For DocuSeal Pro features not included in this fork (SMS verification, SSO/SAML, conditional fields, bulk send, etc.), please consider supporting the original DocuSeal team at [docuseal.com/pricing](https://www.docuseal.com/pricing).
 
 ## License
 
-Distributed under the AGPLv3 License. See [LICENSE](https://github.com/docusealco/docuseal/blob/master/LICENSE) for more information.
-Unless otherwise noted, all files © 2023 DocuSeal LLC.
+Distributed under the **AGPLv3 License**. See [LICENSE](https://github.com/docusealco/docuseal/blob/master/LICENSE) for more information.
 
-## Tools
+- Original DocuSeal © 2023 DocuSeal LLC
+- Modifications in this fork © 2026 Smart In Venture GmbH
 
-- [Signature Maker](https://www.docuseal.com/online-signature)
-- [Sign Document Online](https://www.docuseal.com/sign-documents-online)
-- [Fill PDF Online](https://www.docuseal.com/fill-pdf)
+All modifications are subject to the AGPLv3 license terms. The source code for this fork is publicly available at [github.com/smartinventure/docuseal](https://github.com/smartinventure/docuseal).
+
+## Disclaimer
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS, COPYRIGHT HOLDERS, OR SPEEDBITS (SMART IN VENTURE GMBH) BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+The Plus features in this fork were developed with AI assistance and have not undergone comprehensive security audits. For production use with sensitive documents, please evaluate the code carefully or consider the official DocuSeal Pro offering.

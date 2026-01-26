@@ -1,31 +1,47 @@
 <div class="my-4">
   <% if current_account.logo.attached? %>
-    <div class="flex items-center gap-4 mb-4">
-      <div class="avatar">
-        <div class="w-24 rounded">
-          <%= image_tag current_account.logo, class: 'object-contain' %>
+    <div class="mb-6">
+      <div class="border border-base-300 rounded-lg p-4 bg-base-200 inline-block">
+        <%= image_tag current_account.logo, class: 'object-contain max-w-full', style: 'max-width: 400px; max-height: 400px;' %>
+      </div>
+      <div class="mt-3">
+        <p class="text-sm text-base-content/70 mb-2"><%= current_account.logo.filename %></p>
+        <label for="remove-logo-modal" class="btn btn-sm btn-error cursor-pointer">
+          <%= t('remove') %>
+        </label>
+      </div>
+    </div>
+
+    <!-- Remove Logo Confirmation Modal -->
+    <input type="checkbox" id="remove-logo-modal" class="modal-toggle" />
+    <div class="modal" role="dialog">
+      <div class="modal-box">
+        <h3 class="font-bold text-lg"><%= t('remove') %> Logo</h3>
+        <p class="py-4"><%= t('are_you_sure_') %></p>
+        <div class="modal-action">
+          <label for="remove-logo-modal" class="btn btn-ghost">Cancel</label>
+          <%= button_to t('remove'), settings_account_logo_path, method: :delete, class: 'btn btn-error' %>
         </div>
       </div>
-      <div>
-        <p class="text-sm text-base-content/70"><%= current_account.logo.filename %></p>
-        <%= button_to t('remove'), settings_account_logo_path, method: :delete, class: 'btn btn-sm btn-error mt-2', data: { turbo_confirm: t('are_you_sure') } %>
-      </div>
+      <label class="modal-backdrop" for="remove-logo-modal">Close</label>
     </div>
   <% end %>
 
-  <%= form_with url: settings_account_logo_path, method: :post,
+  <%= form_with scope: :account, url: settings_account_logo_path, method: :post,
                 html: { class: 'space-y-4', multipart: true } do |f| %>
     <div class="form-control">
       <label class="label">
         <span class="label-text"><%= t('upload_logo') %></span>
       </label>
-      <%= f.file_field :logo, accept: 'image/*', class: 'file-input file-input-bordered w-full' %>
+      <%= f.file_field :logo, accept: 'image/png, image/jpeg, image/jpg', class: 'file-input file-input-bordered w-full' %>
       <label class="label">
-        <span class="label-text-alt">PNG, JPG (200x200px)</span>
+        <span class="label-text-alt">PNG, JPG (max 5MB)</span>
       </label>
     </div>
     <div class="form-control">
-      <%= f.submit button_title(title: t('upload'), disabled_with: t('uploading')), class: 'base-button' %>
+      <button type="submit" class="base-button">
+        <%= button_title(title: t('upload'), disabled_with: t('uploading')).html_safe %>
+      </button>
     </div>
   <% end %>
 </div>
