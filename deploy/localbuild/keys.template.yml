@@ -1,0 +1,23 @@
+# =============================================================================
+# GHCR (GitHub Container Registry) Credentials
+# =============================================================================
+# Copy this file to keys.yml and fill in your credentials:
+#   cp keys.template.yml keys.yml
+#
+# IMPORTANT: keys.yml is gitignored - never commit your actual credentials!
+# =============================================================================
+
+# Your GitHub username
+github_username: your-github-username
+
+# GitHub Personal Access Token (PAT)
+# Create at: https://github.com/settings/tokens
+# Required permissions:
+#   - write:packages
+#   - read:packages
+github_pat: ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+# Registry settings (usually don't need to change these)
+registry: ghcr.io
+owner: speedbitsinfinitytools
+image_name: docuseal-plus
