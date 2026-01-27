@@ -100,3 +100,7 @@ Rails/ApplicationController:
 
 Rails/Output:
   Enabled: false
+
+Rails/BulkChangeTable:
+  Exclude:
+    - 'db/migrate/**/*'

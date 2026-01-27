@@ -10,7 +10,7 @@ class EmailSmtpSettingsTestController < ApplicationController
   def create
     @encrypted_config = EncryptedConfig.find_by(account: current_account, key: EncryptedConfig::EMAIL_SMTP_KEY)
 
-    unless @encrypted_config&.value.present?
+    if @encrypted_config&.value.blank?
       return redirect_to settings_email_index_path, alert: I18n.t('please_configure_smtp_settings_first')
     end
 

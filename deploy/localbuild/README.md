@@ -43,6 +43,7 @@ nano keys.yml  # Add your GitHub username and PAT
 | `build-test.sh` | Test build locally without pushing |
 | `build-and-push.sh` | Interactive build and push to GHCR |
 | `reset-builder.sh` | Fix EOF errors by recreating the builder |
+| `lint.sh` | Run all linters (RuboCop, Erblint, ESLint, Brakeman) |
 
 ## Credentials Setup
 
