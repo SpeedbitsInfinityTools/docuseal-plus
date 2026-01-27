@@ -152,6 +152,17 @@ en: &en
   form_has_been_submitted_already: Form has been submitted already
   send_copy_to_email: Send copy to Email
   sending: Sending
+  send_test_email: Send Test Email
+  test_smtp_configuration: Test SMTP Configuration
+  test_email_has_been_sent_to: Test email has been sent to %{email}
+  please_configure_smtp_settings_first: Please configure SMTP settings first
+  please_enter_a_valid_email_address: Please enter a valid email address
+  failed_to_send_test_email: "Failed to send test email: %{error}"
+  a_test_email_will_be_sent_to_this_address: A test email will be sent to this address to verify your SMTP configuration
+  docuseal_smtp_test_email: DocuSeal SMTP Test Email
+  this_is_a_test_email_from_docuseal: This is a test email from DocuSeal.
+  if_you_received_this_email_your_smtp_settings_are_working_correctly: If you received this email, your SMTP settings are working correctly.
+  sent_to: "Sent to: %{email}"
   resubmit: Resubmit
   form_has_been_deleted_by_html: 'Form has been deleted by <span class="font-semibold">%{name}</span>.'
   or: or
@@ -1138,6 +1149,17 @@ es: &es
   form_has_been_submitted_already: El formulario ya ha sido enviado
   send_copy_to_email: Enviar copia a Correo electrónico
   sending: Enviando
+  send_test_email: Enviar correo de prueba
+  test_smtp_configuration: Probar configuración SMTP
+  test_email_has_been_sent_to: Se ha enviado un correo de prueba a %{email}
+  please_configure_smtp_settings_first: Por favor, configure primero los ajustes SMTP
+  please_enter_a_valid_email_address: Por favor, introduzca una dirección de correo válida
+  failed_to_send_test_email: "Error al enviar correo de prueba: %{error}"
+  a_test_email_will_be_sent_to_this_address: Se enviará un correo de prueba a esta dirección para verificar la configuración SMTP
+  docuseal_smtp_test_email: Correo de prueba SMTP de DocuSeal
+  this_is_a_test_email_from_docuseal: Este es un correo de prueba de DocuSeal.
+  if_you_received_this_email_your_smtp_settings_are_working_correctly: Si recibió este correo, su configuración SMTP funciona correctamente.
+  sent_to: "Enviado a: %{email}"
   resubmit: Reenviar
   or: o
   download_documents: Descargar documentos
@@ -2120,6 +2142,17 @@ it: &it
   form_has_been_submitted_already: Il modulo è già stato inviato
   send_copy_to_email: Invia copia via email
   sending: Inviando
+  send_test_email: Invia email di prova
+  test_smtp_configuration: Testa configurazione SMTP
+  test_email_has_been_sent_to: Email di prova inviata a %{email}
+  please_configure_smtp_settings_first: Configura prima le impostazioni SMTP
+  please_enter_a_valid_email_address: Inserisci un indirizzo email valido
+  failed_to_send_test_email: "Invio email di prova fallito: %{error}"
+  a_test_email_will_be_sent_to_this_address: Un'email di prova verrà inviata a questo indirizzo per verificare la configurazione SMTP
+  docuseal_smtp_test_email: Email di prova SMTP DocuSeal
+  this_is_a_test_email_from_docuseal: Questa è un'email di prova da DocuSeal.
+  if_you_received_this_email_your_smtp_settings_are_working_correctly: Se hai ricevuto questa email, le tue impostazioni SMTP funzionano correttamente.
+  sent_to: "Inviato a: %{email}"
   resubmit: Reinvia
   or: o
   download_documents: Scarica documenti
@@ -3103,6 +3136,17 @@ fr: &fr
   form_has_been_submitted_already: Le formulaire a déjà été soumis
   send_copy_to_email: Envoyer une copie par e‑mail
   sending: Envoi en cours
+  send_test_email: Envoyer un e‑mail de test
+  test_smtp_configuration: Tester la configuration SMTP
+  test_email_has_been_sent_to: Un e‑mail de test a été envoyé à %{email}
+  please_configure_smtp_settings_first: Veuillez d'abord configurer les paramètres SMTP
+  please_enter_a_valid_email_address: Veuillez saisir une adresse e‑mail valide
+  failed_to_send_test_email: "Échec de l'envoi de l'e‑mail de test : %{error}"
+  a_test_email_will_be_sent_to_this_address: Un e‑mail de test sera envoyé à cette adresse pour vérifier votre configuration SMTP
+  docuseal_smtp_test_email: E‑mail de test SMTP DocuSeal
+  this_is_a_test_email_from_docuseal: Ceci est un e‑mail de test de DocuSeal.
+  if_you_received_this_email_your_smtp_settings_are_working_correctly: Si vous avez reçu cet e‑mail, vos paramètres SMTP fonctionnent correctement.
+  sent_to: "Envoyé à : %{email}"
   resubmit: Soumettre à nouveau
   or: ou
   download_documents: Télécharger les documents
@@ -4082,6 +4126,17 @@ pt: &pt
   form_has_been_submitted_already: O formulário já foi submetido
   send_copy_to_email: Enviar cópia para Email
   sending: Enviando
+  send_test_email: Enviar e-mail de teste
+  test_smtp_configuration: Testar configuração SMTP
+  test_email_has_been_sent_to: E-mail de teste enviado para %{email}
+  please_configure_smtp_settings_first: Por favor, configure primeiro as definições SMTP
+  please_enter_a_valid_email_address: Por favor, introduza um endereço de e-mail válido
+  failed_to_send_test_email: "Falha ao enviar e-mail de teste: %{error}"
+  a_test_email_will_be_sent_to_this_address: Um e-mail de teste será enviado para este endereço para verificar a sua configuração SMTP
+  docuseal_smtp_test_email: E-mail de teste SMTP DocuSeal
+  this_is_a_test_email_from_docuseal: Este é um e-mail de teste do DocuSeal.
+  if_you_received_this_email_your_smtp_settings_are_working_correctly: Se recebeu este e-mail, as suas definições SMTP estão a funcionar corretamente.
+  sent_to: "Enviado para: %{email}"
   resubmit: Reenviar
   or: ou
   download_documents: Baixar documentos
@@ -5063,6 +5118,17 @@ de: &de
   form_has_been_submitted_already: Das Formular wurde bereits eingereicht
   send_copy_to_email: Kopie per E-Mail senden
   sending: Wird gesendet
+  send_test_email: Test-E-Mail senden
+  test_smtp_configuration: SMTP-Konfiguration testen
+  test_email_has_been_sent_to: Test-E-Mail wurde an %{email} gesendet
+  please_configure_smtp_settings_first: Bitte konfigurieren Sie zuerst die SMTP-Einstellungen
+  please_enter_a_valid_email_address: Bitte geben Sie eine gültige E-Mail-Adresse ein
+  failed_to_send_test_email: "Fehler beim Senden der Test-E-Mail: %{error}"
+  a_test_email_will_be_sent_to_this_address: Eine Test-E-Mail wird an diese Adresse gesendet, um Ihre SMTP-Konfiguration zu überprüfen
+  docuseal_smtp_test_email: DocuSeal SMTP Test-E-Mail
+  this_is_a_test_email_from_docuseal: Dies ist eine Test-E-Mail von DocuSeal.
+  if_you_received_this_email_your_smtp_settings_are_working_correctly: Wenn Sie diese E-Mail erhalten haben, funktionieren Ihre SMTP-Einstellungen korrekt.
+  sent_to: "Gesendet an: %{email}"
   resubmit: Erneut einreichen
   form_has_been_deleted_by_html: 'Das Formular wurde von <span class="font-semibold">%{name}</span> gelöscht.'
   or: oder
@@ -6434,6 +6500,17 @@ nl: &nl
   form_has_been_submitted_already: Formulier is al ingediend
   send_copy_to_email: Kopie naar e-mail verzenden
   sending: Verzenden
+  send_test_email: Test e-mail verzenden
+  test_smtp_configuration: SMTP-configuratie testen
+  test_email_has_been_sent_to: Test e-mail is verzonden naar %{email}
+  please_configure_smtp_settings_first: Configureer eerst de SMTP-instellingen
+  please_enter_a_valid_email_address: Voer een geldig e-mailadres in
+  failed_to_send_test_email: "Verzenden van test e-mail mislukt: %{error}"
+  a_test_email_will_be_sent_to_this_address: Er wordt een test e-mail naar dit adres verzonden om uw SMTP-configuratie te verifiëren
+  docuseal_smtp_test_email: DocuSeal SMTP test e-mail
+  this_is_a_test_email_from_docuseal: Dit is een test e-mail van DocuSeal.
+  if_you_received_this_email_your_smtp_settings_are_working_correctly: Als u deze e-mail heeft ontvangen, werken uw SMTP-instellingen correct.
+  sent_to: "Verzonden naar: %{email}"
   resubmit: Opnieuw indienen
   form_has_been_deleted_by_html: Formulier is verwijderd door <span class="font-semibold">%{name}</span>.
   or: of

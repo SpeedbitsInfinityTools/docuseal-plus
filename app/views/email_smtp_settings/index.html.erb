@@ -57,6 +57,18 @@
         <%= f.button button_title(title: t('save'), disabled_with: t('saving')), class: 'base-button' %>
       </div>
     <% end %>
+    <% if @encrypted_config.persisted? && @encrypted_config.value.present? %>
+      <div class="divider"></div>
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text font-medium"><%= t('test_smtp_configuration') %></span>
+        </label>
+        <%= link_to new_settings_email_test_path, class: 'btn btn-outline btn-md', data: { turbo_frame: 'modal' } do %>
+          <%= svg_icon('mail', class: 'w-5 h-5') %>
+          <%= t('send_test_email') %>
+        <% end %>
+      </div>
+    <% end %>
   </div>
   <div class="w-0 md:w-52"></div>
 </div>
