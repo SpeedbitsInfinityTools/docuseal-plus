@@ -201,6 +201,7 @@ Rails.application.routes.draw do
         patch :update_app_url
       end
     end
+    get 'about', to: 'pages#about', as: :about
   end
 
   get '/js/:filename', to: 'embed_scripts#show', as: :embed_script

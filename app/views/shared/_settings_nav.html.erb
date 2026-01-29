@@ -49,6 +49,9 @@
           <%= link_to t('users'), settings_users_path, class: 'text-base hover:bg-base-300' %>
         </li>
       <% end %>
+      <li>
+        <%= link_to t('about'), settings_about_path, class: 'text-base hover:bg-base-300' %>
+      </li>
       <%= render 'shared/settings_nav_extra' %>
       <% if Docuseal.demo? || !Docuseal.multitenant? %>
         <% if can?(:read, AccessToken) %>

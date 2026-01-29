@@ -377,6 +377,16 @@ en: &en
   close: Close
   upgrade: Upgrade
   settings: Settings
+  about: About
+  version_information: Version Information
+  current_version: Current Version
+  version_source_hint: Version information is sourced from GitHub releases.
+  version_not_available: Version information is not available.
+  links: Links
+  github: GitHub
+  modified_version: Modified Version
+  modified_version_description: This is a modified version of DocuSeal with additional features.
+  about_description: A self-hosted and open-source web platform that provides secure and efficient digital document signing and processing.
   console: Console
   verify_pdf: Verify PDF
   sign_out: Sign out
@@ -5373,6 +5383,16 @@ de: &de
   close: Schließen
   upgrade: Upgrade
   settings: Einstellungen
+  about: Über
+  version_information: Versionsinformationen
+  current_version: Aktuelle Version
+  version_source_hint: Versionsinformationen stammen von GitHub-Releases.
+  version_not_available: Versionsinformationen sind nicht verfügbar.
+  links: Links
+  github: GitHub
+  modified_version: Modifizierte Version
+  modified_version_description: Dies ist eine modifizierte Version von DocuSeal mit zusätzlichen Funktionen.
+  about_description: Eine selbst gehostete und quelloffene Webplattform, die sicheres und effizientes digitales Dokumentensignieren und -verarbeiten bietet.
   console: Konsole
   verify_pdf: PDF verifizieren
   sign_out: Abmelden
