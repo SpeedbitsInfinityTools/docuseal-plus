@@ -1,0 +1,14 @@
+<%= render 'shared/turbo_modal', title: t('send_test_reminder') do %>
+  <%= form_with url: settings_notifications_test_index_path, method: :post, class: 'space-y-4', data: { turbo_frame: '_top' } do |f| %>
+    <div class="form-control">
+      <%= f.label :email, t('email'), class: 'label' %>
+      <%= f.email_field :email, value: params[:email] || current_user.email, required: true, autofocus: true, class: 'base-input', placeholder: 'example@email.com' %>
+      <label class="label">
+        <span class="label-text-alt text-base-content/70"><%= t('a_test_reminder_will_be_sent_to_this_email') %></span>
+      </label>
+    </div>
+    <div class="form-control pt-2">
+      <%= f.button button_title(title: t('send_test_reminder'), disabled_with: t('sending')), class: 'base-button' %>
+    </div>
+  <% end %>
+<% end %>

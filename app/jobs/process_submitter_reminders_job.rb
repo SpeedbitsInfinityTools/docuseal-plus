@@ -3,10 +3,14 @@
 class ProcessSubmitterRemindersJob
   include Sidekiq::Job
 
-  # Run every hour
-  SCHEDULE_INTERVAL = 1.hour
+  # In development: run every minute to support short testing intervals
+  # In production: run every hour for efficiency
+  def self.schedule_interval
+    Rails.env.production? ? 1.hour : 1.minute
+  end
 
   DURATION_MAP = {
+    'two_minutes' => 2.minutes,
     'one_hour' => 1.hour,
     'two_hours' => 2.hours,
     'four_hours' => 4.hours,
@@ -31,7 +35,7 @@ class ProcessSubmitterRemindersJob
     end
   ensure
     # Reschedule the job for the next interval
-    self.class.perform_in(SCHEDULE_INTERVAL)
+    self.class.perform_in(self.class.schedule_interval)
   end
 
   private

@@ -176,6 +176,7 @@ Rails.application.routes.draw do
     resources :email_test, only: %i[new create], controller: 'email_smtp_settings_test'
     resources :sso, only: %i[index], controller: 'sso_settings'
     resources :notifications, only: %i[index create], controller: 'notifications_settings'
+    resources :notifications_test, only: %i[new create], controller: 'notifications_settings_test'
     resource :esign, only: %i[show create new update destroy], controller: 'esign_settings'
     resources :users, only: %i[index]
     resources :archived_users, only: %i[index], path: 'users/:status', controller: 'users',

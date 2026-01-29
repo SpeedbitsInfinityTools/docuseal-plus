@@ -159,6 +159,12 @@ en: &en
   please_enter_a_valid_email_address: Please enter a valid email address
   failed_to_send_test_email: "Failed to send test email: %{error}"
   a_test_email_will_be_sent_to_this_address: A test email will be sent to this address to verify your SMTP configuration
+  send_test_reminder: Send Test Reminder
+  test_reminder_email_has_been_sent_to: Test reminder email has been sent to %{email}
+  a_test_reminder_will_be_sent_to_this_email: A test reminder email will be sent to this address
+  failed_to_send_test_reminder: "Failed to send test reminder: %{error}"
+  no_pending_submissions_found_for_testing: No pending submissions found for testing. Create a submission first.
+  no_templates_found_for_testing: No templates found for testing. Create a template first.
   docuseal_smtp_test_email: DocuSeal SMTP Test Email
   this_is_a_test_email_from_docuseal: This is a test email from DocuSeal.
   if_you_received_this_email_your_smtp_settings_are_working_correctly: If you received this email, your SMTP settings are working correctly.
@@ -303,6 +309,8 @@ en: &en
   first_reminder_in: First reminder in
   second_reminder_in: Second reminder in
   third_reminder_in: Third reminder in
+  preface_email_subject_with: Preface email subject with
+  preface_subject_hint: 'Add a prefix to reminder email subjects, e.g. "Reminder: "'
   learn_more: Learn More
   unable_to_save: Unable to save.
   invalid_timeserver: Invalid Timeserver
@@ -325,6 +333,10 @@ en: &en
   button_title: Button title
   button_url: Button URL
   upload_logo: Upload Logo
+  logo_recommendation_title: "Recommended: Square icon/symbol"
+  logo_recommendation_square: Use a square image (1:1 aspect ratio)
+  logo_recommendation_size: Recommended size 200x200 to 500x500 pixels
+  logo_recommendation_no_text: Use an icon or symbol without company name text (the name is displayed separately)
   show_confetti_on_successful_completion: Show confetti on successful completion
   attach_audit_log_pdf: Attach audit log PDF
   attach_documents: Attach documents
@@ -411,6 +423,7 @@ en: &en
   add_new_recipients: Add New Recipients
   add_recipients_html: <span>Add <span class="hidden md:inline">Recipients</span></span>
   type_emails_here: Type emails here
+  separate_multiple_emails_with_comma_or_new_line: Separate multiple emails with comma or new line
   or_embed_on_your_website: Or embed on your website
   phone: Phone
   send_emails: Send emails
@@ -606,6 +619,7 @@ en: &en
   upgrade_your_plan_to_invite_more_users_contact_email: 'Upgrade your plan to invite more users (contact %{email}).'
   contact_your_admin_email_to_invite_more_users: 'Contact your admin %{email} to invite more users.'
   contact_your_administrator_to_add_new_users: Contact your administrator to add new user
+  two_minutes: 2 minutes (for testing)
   one_hour: 1 hour
   two_hours: 2 hours
   four_hours: 4 hours
@@ -1321,6 +1335,10 @@ es: &es
   button_title: Título del botón
   button_url: URL del botón
   upload_logo: Subir logotipo
+  logo_recommendation_title: "Recomendado: Icono/símbolo cuadrado"
+  logo_recommendation_square: Usar una imagen cuadrada (relación de aspecto 1:1)
+  logo_recommendation_size: Tamaño recomendado 200x200 a 500x500 píxeles
+  logo_recommendation_no_text: Usar un icono o símbolo sin texto del nombre de la empresa (el nombre se muestra por separado)
   show_confetti_on_successful_completion: Mostrar confeti al completar con éxito
   attach_audit_log_pdf: Adjuntar PDF del registro de auditoría
   attach_documents: Adjuntar documentos
@@ -2314,6 +2332,10 @@ it: &it
   button_title: Titolo del pulsante
   button_url: URL del pulsante
   upload_logo: Carica logo
+  logo_recommendation_title: "Consigliato: Icona/simbolo quadrato"
+  logo_recommendation_square: Usa un'immagine quadrata (rapporto 1:1)
+  logo_recommendation_size: Dimensione consigliata 200x200 a 500x500 pixel
+  logo_recommendation_no_text: Usa un'icona o simbolo senza il nome dell'azienda (il nome viene visualizzato separatamente)
   show_confetti_on_successful_completion: Mostra coriandoli al completamento con successo
   attach_audit_log_pdf: Allegare il PDF del registro di audit
   attach_documents: Allegare documenti
@@ -3308,6 +3330,10 @@ fr: &fr
   button_title: Titre du bouton
   button_url: URL du bouton
   upload_logo: Téléverser le logo
+  logo_recommendation_title: "Recommandé : Icône/symbole carré"
+  logo_recommendation_square: Utilisez une image carrée (ratio 1:1)
+  logo_recommendation_size: Taille recommandée 200x200 à 500x500 pixels
+  logo_recommendation_no_text: Utilisez une icône ou symbole sans le nom de l'entreprise (le nom s'affiche séparément)
   show_confetti_on_successful_completion: Afficher des confettis en cas de réussite
   attach_audit_log_pdf: Joindre le PDF du journal d’audit
   attach_documents: Joindre les documents
@@ -4298,6 +4324,10 @@ pt: &pt
   button_title: Título do botão
   button_url: URL do botão
   upload_logo: Enviar logotipo
+  logo_recommendation_title: "Recomendado: Ícone/símbolo quadrado"
+  logo_recommendation_square: Use uma imagem quadrada (proporção 1:1)
+  logo_recommendation_size: Tamanho recomendado 200x200 a 500x500 pixels
+  logo_recommendation_no_text: Use um ícone ou símbolo sem o nome da empresa (o nome é exibido separadamente)
   show_confetti_on_successful_completion: Mostrar confete ao concluir com sucesso
   attach_audit_log_pdf: Anexar PDF do log de auditoria
   attach_documents: Anexar documentos
@@ -5125,6 +5155,12 @@ de: &de
   please_enter_a_valid_email_address: Bitte geben Sie eine gültige E-Mail-Adresse ein
   failed_to_send_test_email: "Fehler beim Senden der Test-E-Mail: %{error}"
   a_test_email_will_be_sent_to_this_address: Eine Test-E-Mail wird an diese Adresse gesendet, um Ihre SMTP-Konfiguration zu überprüfen
+  send_test_reminder: Test-Erinnerung senden
+  test_reminder_email_has_been_sent_to: Test-Erinnerungs-E-Mail wurde an %{email} gesendet
+  a_test_reminder_will_be_sent_to_this_email: Eine Test-Erinnerungs-E-Mail wird an diese Adresse gesendet
+  failed_to_send_test_reminder: "Fehler beim Senden der Test-Erinnerung: %{error}"
+  no_pending_submissions_found_for_testing: Keine ausstehenden Einreichungen zum Testen gefunden. Erstellen Sie zuerst eine Einreichung.
+  no_templates_found_for_testing: Keine Vorlagen zum Testen gefunden. Erstellen Sie zuerst eine Vorlage.
   docuseal_smtp_test_email: DocuSeal SMTP Test-E-Mail
   this_is_a_test_email_from_docuseal: Dies ist eine Test-E-Mail von DocuSeal.
   if_you_received_this_email_your_smtp_settings_are_working_correctly: Wenn Sie diese E-Mail erhalten haben, funktionieren Ihre SMTP-Einstellungen korrekt.
@@ -5269,6 +5305,8 @@ de: &de
   first_reminder_in: Erste Erinnerung in
   second_reminder_in: Zweite Erinnerung in
   third_reminder_in: Dritte Erinnerung in
+  preface_email_subject_with: E-Mail-Betreff voranstellen mit
+  preface_subject_hint: 'Fügen Sie ein Präfix für Erinnerungs-E-Mails hinzu, z.B. "Erinnerung: "'
   learn_more: Mehr erfahren
   unable_to_save: Speichern nicht möglich.
   invalid_timeserver: Ungültiger Zeitstempelserver
@@ -5291,6 +5329,10 @@ de: &de
   button_title: Schaltflächentitel
   button_url: Schaltflächen-URL
   upload_logo: Logo hochladen
+  logo_recommendation_title: "Empfohlen: Quadratisches Icon/Symbol"
+  logo_recommendation_square: Verwenden Sie ein quadratisches Bild (Seitenverhältnis 1:1)
+  logo_recommendation_size: Empfohlene Größe 200x200 bis 500x500 Pixel
+  logo_recommendation_no_text: Verwenden Sie ein Icon oder Symbol ohne Firmennamen (der Name wird separat angezeigt)
   show_confetti_on_successful_completion: Konfetti bei erfolgreichem Abschluss anzeigen
   attach_audit_log_pdf: Prüfprotokoll-PDF anhängen
   attach_documents: Dokumente anhängen
@@ -5377,6 +5419,7 @@ de: &de
   add_new_recipients: Neue Empfänger hinzufügen
   add_recipients_html: Empfänger
   type_emails_here: E-Mail-Adressen hier eingeben
+  separate_multiple_emails_with_comma_or_new_line: Mehrere E-Mails mit Komma oder neuer Zeile trennen
   or_embed_on_your_website: Oder auf Ihrer Website einbetten
   phone: Telefon
   send_emails: E-Mails senden
@@ -5572,6 +5615,7 @@ de: &de
   upgrade_your_plan_to_invite_more_users_contact_email: 'Führen Sie ein Upgrade durch, um mehr Benutzer einzuladen (Kontakt %{email}).'
   contact_your_admin_email_to_invite_more_users: 'Kontaktieren Sie Ihren Administrator %{email}, um mehr Benutzer einzuladen.'
   contact_your_administrator_to_add_new_users: Kontaktieren Sie Ihren Administrator, um neue Benutzer hinzuzufügen.
+  two_minutes: 2 Minuten (zum Testen)
   one_hour: 1 Stunde
   two_hours: 2 Stunden
   four_hours: 4 Stunden
@@ -6673,6 +6717,10 @@ nl: &nl
   button_title: Knoptekst
   button_url: Knop-URL
   upload_logo: Logo uploaden
+  logo_recommendation_title: "Aanbevolen: Vierkant icoon/symbool"
+  logo_recommendation_square: Gebruik een vierkante afbeelding (beeldverhouding 1:1)
+  logo_recommendation_size: Aanbevolen grootte 200x200 tot 500x500 pixels
+  logo_recommendation_no_text: Gebruik een icoon of symbool zonder bedrijfsnaam (de naam wordt apart weergegeven)
   show_confetti_on_successful_completion: Confetti tonen na succesvolle voltooiing
   attach_audit_log_pdf: Auditlogboek-PDF bijvoegen
   attach_documents: Documenten bijvoegen

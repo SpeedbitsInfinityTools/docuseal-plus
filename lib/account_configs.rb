@@ -2,6 +2,7 @@
 
 module AccountConfigs
   REMINDER_DURATIONS = {
+    'two_minutes' => '2 minutes (for testing)',
     'one_hour' => '1 hour',
     'two_hours' => '2 hours',
     'four_hours' => '4 hours',

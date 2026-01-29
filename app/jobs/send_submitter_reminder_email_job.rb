@@ -20,6 +20,11 @@ class SendSubmitterReminderEmailJob
 
     mail = SubmitterMailer.invitation_email(submitter)
 
+    # Add reminder prefix to subject if configured
+    reminder_config = submitter.account.account_configs.find_by(key: AccountConfig::SUBMITTER_REMINDERS)
+    subject_prefix = reminder_config&.value&.dig('subject_prefix')
+    mail.subject = "#{subject_prefix}#{mail.subject}" if subject_prefix.present?
+
     Submitters::ValidateSending.call(submitter, mail)
 
     mail.deliver_now!

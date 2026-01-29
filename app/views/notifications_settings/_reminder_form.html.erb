@@ -1,8 +1,9 @@
 <%= form_for config, url: settings_notifications_path, method: :post, html: { autocomplete: 'off', class: 'space-y-4' } do |f| %>
   <%= f.hidden_field :key %>
   <div class="form-control">
-    <% record = Struct.new(:first_duration, :second_duration, :third_duration).new(*(f.object.value || {}).values_at('first_duration', 'second_duration', 'third_duration')) %>
-    <% durations = (Docuseal.multitenant? ? AccountConfigs::REMINDER_DURATIONS.except('one_hour', 'two_hours') : AccountConfigs::REMINDER_DURATIONS).keys.map { |v| [t(v.underscore), v] } %>
+    <% record = Struct.new(:first_duration, :second_duration, :third_duration, :subject_prefix).new(*(f.object.value || {}).values_at('first_duration', 'second_duration', 'third_duration', 'subject_prefix')) %>
+    <% excluded_durations = Docuseal.multitenant? ? %w[one_hour two_hours two_minutes] : (Rails.env.production? ? %w[two_minutes] : []) %>
+    <% durations = AccountConfigs::REMINDER_DURATIONS.except(*excluded_durations).keys.map { |v| [t(v.underscore), v] } %>
     <div class="flex flex-col md:flex-row gap-2">
       <div class="w-full">
         <%= f.fields_for :value, record  do |ff| %>
@@ -24,7 +25,19 @@
       </div>
     </div>
   </div>
-  <div class="form-control pt-4">
-    <%= f.button button_title(title: t('save'), disabled_with: t('updating')), class: 'base-button' %>
+  <div class="form-control">
+    <%= f.fields_for :value, record do |ff| %>
+      <%= ff.label :subject_prefix, t('preface_email_subject_with'), class: 'label' %>
+      <%= ff.text_field :subject_prefix, class: 'base-input', placeholder: 'Reminder: ' %>
+      <label class="label py-0">
+        <span class="label-text-alt text-base-content/60"><%= t('preface_subject_hint') %></span>
+      </label>
+    <% end %>
+  </div>
+  <div class="form-control pt-4 flex flex-col md:flex-row gap-2">
+    <%= f.button button_title(title: t('save'), disabled_with: t('updating')), class: 'base-button flex-grow' %>
+    <%= link_to new_settings_notifications_test_path, class: 'white-button text-center', data: { turbo_frame: 'modal' } do %>
+      <%= t('send_test_reminder') %>
+    <% end %>
   </div>
 <% end %>
