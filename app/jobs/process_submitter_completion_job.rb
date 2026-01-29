@@ -31,16 +31,41 @@ class ProcessSubmitterCompletionJob
     enqueue_completed_webhooks(submitter, is_all_completed:)
   end
 
+  MAX_RETRY_ATTEMPTS = 5
+
   def create_completed_submitter!(submitter)
+    retry_attempts ||= 0
     completed_submitter = CompletedSubmitter.find_or_initialize_by(submitter_id: submitter.id)
 
     return completed_submitter if completed_submitter.persisted?
 
-    submission = submitter.submission
+    verification_method, sms_count = extract_verification_data(submitter)
 
+    completed_submitter.assign_attributes(
+      submission_id: submitter.submission_id,
+      account_id: submitter.submission.account_id,
+      is_first: !CompletedSubmitter.exists?(submission: submitter.submission_id, is_first: true),
+      template_id: submitter.submission.template_id,
+      source: submitter.submission.source,
+      sms_count:,
+      verification_method:,
+      completed_at: submitter.completed_at
+    )
+
+    completed_submitter.save!
+    completed_submitter
+  rescue ActiveRecord::RecordNotUnique
+    retry_attempts += 1
+    raise if retry_attempts >= MAX_RETRY_ATTEMPTS
+
+    sleep 0.1 * retry_attempts
+    retry
+  end
+
+  def extract_verification_data(submitter)
     complete_verification_events, sms_events =
       submitter.submission_events.where(event_type: %i[send_sms send_2fa_sms complete_verification complete_kba])
-               .partition { |e| e.event_type == 'complete_verification' || e.event_type == 'complete_kba' }
+               .partition { |e| e.event_type.in?(%w[complete_verification complete_kba]) }
 
     complete_verification_event = complete_verification_events.first
 
@@ -51,22 +76,9 @@ class ProcessSubmitterCompletionJob
         complete_verification_event.data['method']
       end
 
-    completed_submitter.assign_attributes(
-      submission_id: submitter.submission_id,
-      account_id: submission.account_id,
-      is_first: !CompletedSubmitter.exists?(submission: submitter.submission_id, is_first: true),
-      template_id: submission.template_id,
-      source: submission.source,
-      sms_count: sms_events.sum { |e| e.data['segments'] || 1 },
-      verification_method:,
-      completed_at: submitter.completed_at
-    )
+    sms_count = sms_events.sum { |e| e.data['segments'] || 1 }
 
-    completed_submitter.save!
-
-    completed_submitter
-  rescue ActiveRecord::RecordNotUnique
-    retry
+    [verification_method, sms_count]
   end
 
   def create_completed_documents!(submitter)

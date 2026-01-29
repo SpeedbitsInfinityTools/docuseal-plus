@@ -32,9 +32,13 @@ class ProcessSubmitterRemindersJob
   def perform
     Account.active.find_each do |account|
       process_account_reminders(account)
+    rescue StandardError => e
+      # Log error but continue processing other accounts
+      Rails.logger.error("ProcessSubmitterRemindersJob failed for account #{account.id}: #{e.message}")
+      Rollbar.error(e, account_id: account.id) if defined?(Rollbar)
     end
   ensure
-    # Reschedule the job for the next interval
+    # Always reschedule to keep the reminder system running
     self.class.perform_in(self.class.schedule_interval)
   end
 
