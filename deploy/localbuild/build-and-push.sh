@@ -112,7 +112,15 @@ echo "     Tags: latest + $BASE_VERSION + $NEXT_VERSION"
 echo "     Auto-increments version: $CURRENT_VERSION -> $NEXT_VERSION"
 echo "     Updates VERSION file"
 echo ""
-read -p "Select option (1-3): " BUILD_TYPE
+echo "  4) Re-release current version (rebuild with fixes)"
+echo "     Tags: latest + $BASE_VERSION + $CURRENT_VERSION"
+echo "     Rebuilds image, keeps current version number"
+echo ""
+echo "  5) Promote existing image (no rebuild)"
+echo "     Re-tag an existing image as latest/$BASE_VERSION"
+echo "     Fast - uses registry directly, no local build needed"
+echo ""
+read -p "Select option (1-5): " BUILD_TYPE
 
 case $BUILD_TYPE in
     1)
@@ -120,6 +128,7 @@ case $BUILD_TYPE in
         TAG_LATEST=false
         TAG_BASE=false
         UPDATE_VERSION=false
+        PROMOTE_ONLY=false
         echo ""
         echo "Dev build: $VERSION"
         ;;
@@ -128,6 +137,7 @@ case $BUILD_TYPE in
         TAG_LATEST=true
         TAG_BASE=false
         UPDATE_VERSION=false
+        PROMOTE_ONLY=false
         echo ""
         echo "Latest build: $VERSION (+ latest tag)"
         ;;
@@ -136,14 +146,283 @@ case $BUILD_TYPE in
         TAG_LATEST=true
         TAG_BASE=true
         UPDATE_VERSION=true
+        PROMOTE_ONLY=false
         echo ""
         echo "Release build: $VERSION (+ latest + $BASE_VERSION tags)"
+        ;;
+    4)
+        VERSION="$CURRENT_VERSION"
+        TAG_LATEST=true
+        TAG_BASE=true
+        UPDATE_VERSION=false
+        PROMOTE_ONLY=false
+        echo ""
+        echo "Re-release build: $VERSION (+ latest + $BASE_VERSION tags)"
+        echo "Keeping current version number: $VERSION"
+        ;;
+    5)
+        PROMOTE_ONLY=true
+        UPDATE_VERSION=false
+        
+        # Login first to list tags
+        echo ""
+        echo "Logging in to $REGISTRY..."
+        echo "$GITHUB_PAT" | docker login "$REGISTRY" -u "$GITHUB_USERNAME" --password-stdin
+        
+        echo ""
+        echo "Fetching available tags from GHCR..."
+        echo ""
+        
+        # List recent tags using GitHub API
+        TAGS_JSON=$(curl -s -H "Authorization: Bearer $GITHUB_PAT" \
+            "https://api.github.com/orgs/${OWNER}/packages/container/${IMAGE_NAME}/versions?per_page=10" 2>/dev/null || echo "[]")
+        
+        if [ "$TAGS_JSON" = "[]" ] || [ -z "$TAGS_JSON" ]; then
+            echo "Could not fetch tags. Enter the source tag manually."
+            echo ""
+            read -p "Source tag to promote (e.g., dev-20260129-abc1234): " SOURCE_TAG
+        else
+            # Parse tags - extract unique tags from versions
+            TAGS_LIST=$(echo "$TAGS_JSON" | python3 -c "
+import sys, json
+try:
+    data = json.load(sys.stdin)
+    seen = set()
+    for v in data:
+        tags = v.get('metadata', {}).get('container', {}).get('tags', [])
+        for tag in tags:
+            if tag.startswith('dev-') and tag not in seen:
+                seen.add(tag)
+                print(tag)
+                break
+        else:
+            for tag in tags:
+                if tag not in seen and tag not in ('latest',):
+                    seen.add(tag)
+                    print(tag)
+                    break
+except:
+    pass
+" 2>/dev/null)
+            
+            if [ -z "$TAGS_LIST" ]; then
+                echo "Could not parse tags. Enter the source tag manually."
+                echo ""
+                read -p "Source tag to promote (e.g., dev-20260129-abc1234): " SOURCE_TAG
+            else
+                # Convert to array
+                IFS=$'\n' read -rd '' -a TAGS_ARRAY <<< "$TAGS_LIST" || true
+                
+                echo "Available tags:"
+                echo ""
+                for i in "${!TAGS_ARRAY[@]}"; do
+                    echo "  $((i+1))) ${TAGS_ARRAY[$i]}"
+                done
+                echo ""
+                echo "  0) Enter custom tag"
+                echo ""
+                read -p "Select source tag (1-${#TAGS_ARRAY[@]}, or 0 for custom): " TAG_CHOICE
+                
+                if [ "$TAG_CHOICE" = "0" ]; then
+                    read -p "Enter custom tag: " SOURCE_TAG
+                elif [[ "$TAG_CHOICE" =~ ^[0-9]+$ ]] && [ "$TAG_CHOICE" -ge 1 ] && [ "$TAG_CHOICE" -le "${#TAGS_ARRAY[@]}" ]; then
+                    SOURCE_TAG="${TAGS_ARRAY[$((TAG_CHOICE-1))]}"
+                else
+                    echo "Invalid selection"
+                    exit 1
+                fi
+            fi
+        fi
+        
+        if [ -z "$SOURCE_TAG" ]; then
+            echo "Error: No source tag provided"
+            exit 1
+        fi
+        
+        echo ""
+        echo "Selected: ${IMAGE}:${SOURCE_TAG}"
+        
+        echo ""
+        echo "========================================================"
+        echo "Promote To"
+        echo "========================================================"
+        echo ""
+        echo "Source image: ${SOURCE_TAG}"
+        echo ""
+        echo "Promote this image to:"
+        echo ""
+        echo "  1) latest only"
+        echo "     Makes this the default 'latest' image"
+        echo ""
+        echo "  2) Full release (production)"
+        echo "     Tags as: latest + $BASE_VERSION + version number"
+        echo ""
+        read -p "Promote to (1-2): " PROMOTE_TYPE
+        
+        case $PROMOTE_TYPE in
+            1)
+                TAG_LATEST=true
+                TAG_BASE=false
+                VERSION="$SOURCE_TAG"
+                echo ""
+                echo "Will update: latest"
+                ;;
+            2)
+                TAG_LATEST=true
+                TAG_BASE=true
+                
+                echo ""
+                echo "========================================================"
+                echo "Version Selection"
+                echo "========================================================"
+                echo ""
+                echo "Current version in VERSION file: $CURRENT_VERSION"
+                echo ""
+                echo "Version options:"
+                echo "  1) Use current version: $CURRENT_VERSION"
+                echo "  2) Auto-increment: $NEXT_VERSION"
+                echo "  3) Enter custom version"
+                echo ""
+                read -p "Select (1-3): " VERSION_OPTION
+                
+                case $VERSION_OPTION in
+                    1)
+                        VERSION="$CURRENT_VERSION"
+                        ;;
+                    2)
+                        VERSION="$NEXT_VERSION"
+                        UPDATE_VERSION=true
+                        ;;
+                    3)
+                        read -p "Enter version (e.g., 2.3.0.7): " VERSION
+                        if [ -z "$VERSION" ]; then
+                            echo "Error: No version provided"
+                            exit 1
+                        fi
+                        UPDATE_VERSION=true
+                        ;;
+                    *)
+                        echo "Invalid option, using current version"
+                        VERSION="$CURRENT_VERSION"
+                        ;;
+                esac
+                
+                echo ""
+                echo "Will update:"
+                echo "  - latest"
+                echo "  - $BASE_VERSION"
+                echo "  - $VERSION"
+                ;;
+            *)
+                echo "Invalid option"
+                exit 1
+                ;;
+        esac
         ;;
     *)
         echo "Invalid option"
         exit 1
         ;;
 esac
+
+# =============================================================================
+# Handle promote-only mode (re-tag existing image, no rebuild)
+# =============================================================================
+if [ "$PROMOTE_ONLY" = true ]; then
+    echo ""
+    echo "========================================================"
+    echo "Promote Summary"
+    echo "========================================================"
+    echo ""
+    echo "Source:         ${IMAGE}:${SOURCE_TAG}"
+    echo "Tag latest:     $TAG_LATEST"
+    echo "Tag base:       $TAG_BASE (-> $BASE_VERSION)"
+    if [ "$TAG_BASE" = true ]; then
+        echo "Version:        $VERSION"
+    fi
+    echo "Update VERSION: $UPDATE_VERSION"
+    echo ""
+    
+    read -p "Proceed with promotion? (y/N): " CONFIRM
+    if [[ ! "$CONFIRM" =~ ^[Yy]$ ]]; then
+        echo "Cancelled."
+        exit 0
+    fi
+    
+    # Update VERSION file if requested
+    if [ "$UPDATE_VERSION" = true ]; then
+        echo ""
+        echo "Updating VERSION file to $VERSION..."
+        echo "$VERSION" > "$VERSION_FILE"
+        echo "   Updated $VERSION_FILE"
+        
+        # Also update .version
+        echo "$VERSION" > .version
+    fi
+    
+    echo ""
+    echo "========================================================"
+    echo "Promoting image (no rebuild)..."
+    echo "========================================================"
+    echo ""
+    
+    START_TIME=$(date +%s)
+    
+    # Use docker buildx imagetools to create new tags from existing image
+    # This works directly with the registry - no local build needed
+    
+    if [ "$TAG_LATEST" = true ]; then
+        echo "Creating tag: latest"
+        docker buildx imagetools create \
+            --tag "${IMAGE}:latest" \
+            "${IMAGE}:${SOURCE_TAG}"
+    fi
+    
+    if [ "$TAG_BASE" = true ]; then
+        echo "Creating tag: $BASE_VERSION"
+        docker buildx imagetools create \
+            --tag "${IMAGE}:${BASE_VERSION}" \
+            "${IMAGE}:${SOURCE_TAG}"
+        
+        echo "Creating tag: $VERSION"
+        docker buildx imagetools create \
+            --tag "${IMAGE}:${VERSION}" \
+            "${IMAGE}:${SOURCE_TAG}"
+    fi
+    
+    END_TIME=$(date +%s)
+    DURATION=$((END_TIME - START_TIME))
+    
+    echo ""
+    echo "========================================================"
+    echo "Promotion complete!"
+    echo "========================================================"
+    echo ""
+    echo "Duration: ${DURATION}s"
+    echo ""
+    echo "Source: ${IMAGE}:${SOURCE_TAG}"
+    echo ""
+    echo "New tags:"
+    if [ "$TAG_LATEST" = true ]; then
+        echo "   ${IMAGE}:latest"
+    fi
+    if [ "$TAG_BASE" = true ]; then
+        echo "   ${IMAGE}:${BASE_VERSION}"
+        echo "   ${IMAGE}:${VERSION}"
+    fi
+    echo ""
+    
+    if [ "$UPDATE_VERSION" = true ]; then
+        echo "Remember to commit the version update:"
+        echo "   git add VERSION .version"
+        echo "   git commit -m 'Release $VERSION'"
+        echo "   git tag v$VERSION"
+        echo "   git push && git push --tags"
+        echo ""
+    fi
+    
+    exit 0
+fi
 
 # =============================================================================
 # Build Summary and Confirmation

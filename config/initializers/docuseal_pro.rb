@@ -17,15 +17,14 @@ Rails.application.config.to_prepare do
   Submissions::GenerateAuditTrail.prepend(DocusealPro::GenerateAuditTrailOverride)
 end
 
-# Feature 4: Schedule the reminder job (only in server/worker mode, not during precompilation)
-Rails.application.config.after_initialize do
-  if defined?(Sidekiq) && (Rails.const_defined?(:Server) || File.basename($PROGRAM_NAME) == 'sidekiq')
-    # Schedule the initial reminder processing job if not already scheduled
-    Sidekiq.configure_server do |_config|
-      # Check if the job is already scheduled to avoid duplicates on restart
-      unless Sidekiq::ScheduledSet.new.any? { |job| job.klass == 'ProcessSubmitterRemindersJob' }
-        ProcessSubmitterRemindersJob.perform_in(1.minute)
-      end
-    end
+# Feature 4: Schedule the reminder job
+# Use ActiveSupport load hook to schedule when Sidekiq actually starts (works with embedded Sidekiq in Puma)
+ActiveSupport.on_load(:sidekiq_config) do |_config|
+  # Check if the job is already scheduled to avoid duplicates on restart
+  unless Sidekiq::ScheduledSet.new.any? { |job| job.klass == 'ProcessSubmitterRemindersJob' }
+    Rails.logger.info('ProcessSubmitterRemindersJob: Scheduling initial reminder job')
+    ProcessSubmitterRemindersJob.perform_in(1.minute)
+  else
+    Rails.logger.info('ProcessSubmitterRemindersJob: Job already scheduled, skipping')
   end
 end
