@@ -33,7 +33,7 @@
       <label class="label">
         <span class="label-text"><%= t('upload_logo') %></span>
       </label>
-      <%= f.file_field :logo, accept: 'image/png, image/jpeg, image/jpg', class: 'file-input file-input-bordered w-full', onchange: "document.getElementById('logo-upload-btn').disabled = !this.files.length" %>
+      <%= f.file_field :logo, accept: 'image/png, image/jpeg, image/jpg', class: 'file-input file-input-bordered w-full', required: true %>
       <label class="label">
         <span class="label-text-alt">PNG, JPG (max 5MB)</span>
       </label>
@@ -46,10 +46,8 @@
         </ul>
       </div>
     </div>
-    <div class="form-control">
-      <button type="submit" id="logo-upload-btn" class="base-button" disabled>
-        <%= button_title(title: t('upload'), disabled_with: t('uploading')).html_safe %>
-      </button>
-    </div>
+    <toggle-submit class="form-control">
+      <%= f.button button_title(title: t('upload'), disabled_with: t('uploading')), class: 'base-button' %>
+    </toggle-submit>
   <% end %>
 </div>
