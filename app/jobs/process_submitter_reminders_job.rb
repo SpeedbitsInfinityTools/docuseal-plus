@@ -9,6 +9,10 @@ class ProcessSubmitterRemindersJob
     Rails.env.production? ? 1.hour : 1.minute
   end
 
+  # Maximum time a reminder can be overdue before it's considered stale and skipped
+  # This prevents sending a flood of reminders after extended downtime
+  MAX_OVERDUE_DURATION = 7.days
+
   DURATION_MAP = {
     'two_minutes' => 2.minutes,
     'one_hour' => 1.hour,
@@ -81,10 +85,32 @@ class ProcessSubmitterRemindersJob
   end
 
   def check_and_send_reminder(submitter, durations)
-    sent_reminders = submitter.submission.submission_events
-                              .where(submitter:, event_type: 'send_reminder_email')
-                              .pluck(:data)
-                              .filter_map { |d| d['reminder_number'] }
+    submission = submitter.submission
+
+    # Don't send reminders for expired submissions
+    return if submission.expired?
+
+    sent_reminders = submission.submission_events
+                               .where(submitter:, event_type: 'send_reminder_email')
+                               .pluck(:data)
+                               .filter_map { |d| d['reminder_number'] }
+
+    # Find ALL applicable reminders (due and not yet sent)
+    applicable_reminders = find_applicable_reminders(submitter, durations, sent_reminders, submission)
+
+    # Send only the latest applicable reminder (prevents duplicate flood after downtime)
+    return if applicable_reminders.empty?
+
+    latest_reminder = applicable_reminders.max_by { |r| r[:number] }
+
+    SendSubmitterReminderEmailJob.perform_async(
+      'submitter_id' => submitter.id,
+      'reminder_number' => latest_reminder[:number]
+    )
+  end
+
+  def find_applicable_reminders(submitter, durations, sent_reminders, submission)
+    applicable = []
 
     durations.each do |duration_info|
       reminder_number = duration_info[:number]
@@ -96,19 +122,29 @@ class ProcessSubmitterRemindersJob
       reminder_time = submitter.sent_at + duration
       next unless Time.current >= reminder_time
 
-      # Check if previous reminders were sent (if applicable)
-      if reminder_number > 1
-        previous_sent = sent_reminders.include?(reminder_number - 1)
-        next unless previous_sent
-      end
+      # Skip stale reminders (overdue by more than MAX_OVERDUE_DURATION)
+      # unless the submission has a specific expiration that hasn't passed
+      next if reminder_stale?(reminder_time, submission)
 
-      SendSubmitterReminderEmailJob.perform_async(
-        'submitter_id' => submitter.id,
-        'reminder_number' => reminder_number
-      )
-
-      # Only send one reminder at a time
-      break
+      applicable << { number: reminder_number, duration:, reminder_time: }
     end
+
+    applicable
+  end
+
+  def reminder_stale?(reminder_time, submission)
+    overdue_duration = Time.current - reminder_time
+
+    # If submission has an expiration date, use that as the cutoff
+    # (reminder is not stale if submission hasn't expired yet)
+    if submission.expire_at.present?
+      return false unless submission.expired?
+
+      # Submission is expired - don't send any reminders
+      return true
+    end
+
+    # No expiration set - use default 7-day max overdue window
+    overdue_duration > MAX_OVERDUE_DURATION
   end
 end
